@@ -6,7 +6,9 @@
 #define GRN "\x1B[32m"
 #define MAG "\x1B[35m"
 
-
+/*
+    Funcão cria o heap.
+*/
 H *criar_heap(){
     H *h =(H*) malloc(sizeof(H));
     if(h != NULL){
@@ -21,6 +23,9 @@ H *criar_heap(){
     }
 }
 
+/*
+    Funcão craida somente para preencher o heap.
+*/
 int preencher_heap(H *h){
     if(h != NULL){
         printf(MAG "\n***********PREENCHENDO UM HEAP***********\n" RESET);
@@ -44,6 +49,9 @@ int preencher_heap(H *h){
     }
 }
 
+/*
+    Funcão criada somente para printar os elementos existentes no heap.
+*/
 void printar_heap(H *h){
     if (h != NULL){
         printf(MAG "\n***********ELEMENTOS DO HEAP***********\n" RESET);
@@ -55,64 +63,56 @@ void printar_heap(H *h){
     }
 }
 
+/*
+    As funções subir e descer foram criadas para manter a estrutura do
+    heap mesmo que um valor seja atualizado.
+*/
 int subir(H *h, int id){
     if(h != NULL){
-        // printf("\nANTES DA TROCA");
-        // pri(ntar_heap(h);
-        // printf("[((int)id/2)+1]", ((int)id/2)+1);
         while( h->elementos[id] > h->elementos[((int)id/2)] && id > 0){
             if ((int)id/2 ==0){
                 break;
             }
-            printf("[((int)id/2)+1]=%d", (((int)id/2)));
             int aux = h->elementos[((int)id/2)];
             h->elementos[((int)id/2)] = h->elementos[id];
             h->elementos[id] = aux;
             id = ((int)id/2);
         }
-        // printf("\nDEPOIS DA TROCA");
-        // printar_heap(h);
         return 1;
     }
 }
-//funcionando até aqui
+
 int descer(H *h, int id){
     if(h != NULL){
-        printf("\nANTES DA TROCA");
-        printar_heap(h);
         int maior;
-        int j = 2*id+1;
+        int j = 2*id;
         //verifica se existe filho direita
-        if(j <= h->qtd-1 && j < h->tam-1){
+        if(j <= h->qtd && j <= h->tam){
             maior = j;
-            printf("\n1° - elem[maior] = %d", h->elementos[maior]);
 
             //verifica se existe filho esquerda
-            printf("\nj = %d\n", j);
-            printf("\nj+1 = %d\n", j+1);
-            if( j+1 <= h->qtd-1 && j+1 < h->tam-1){
+            if( j+1 <= h->qtd && j+1 <= h->tam){
                 //verifica quem é o maior
                 if ( h->elementos[j+1] > h->elementos[maior]){
                     maior = j+1;
-                    printf("\n2° - elem[maior] = %d", h->elementos[maior]);
                 }
             }
-            printf("\nelem[maior] = %d\n", h->elementos[maior]);
-            int aux = h->elementos[maior];
-            h->elementos[maior] = h->elementos[id];
-            h->elementos[id] = aux;
-            id = maior;
-            printf("\nid = %d\n", id);
-            printf("\nDEPOIS DA TROCA");
-            printar_heap(h);
-            // if((2*id+1 <= h->qtd-1) || (2*id+2 <= h->qtd-1))
-            // if((h->elementos[id] < h->elementos[2*id+1]) || (h->elementos[id] < h->elementos[2*id+2]) )
-            descer(h,id);
-            return 1;
+            if( h->elementos[id] < h->elementos[maior]){
+                int aux = h->elementos[maior];
+                h->elementos[maior] = h->elementos[id];
+                h->elementos[id] = aux;
+                id = maior;
+                descer(h,id);
+                return 1;
+            }
         }
     }
 }
 
+/*
+    Funcão criada somente para atualizar valores do heap e coloca-lo 
+    na posição certa.
+*/
 void atualizar(H *h){
     if(h != NULL){
         int resposta;
@@ -120,20 +120,27 @@ void atualizar(H *h){
             printf("\nHeap vazio!\n");
         }else{
             printf(MAG "\n***********ATUALIZANDO ELEMENTO***********\n" RESET);
-            //printar_heap(h);
             int id, x;
             printf("\nDigite o id do elemento: ");
             scanf("%d", &id);
-            if(id >= 0 || id <= h->qtd-1){
+            if(id >= 1 || id <= h->qtd){
                 printf("Digite o novo valor: ");
                 scanf("%d", &x);
-                if(x > h->elementos[(int)id/2]){
-                    h->elementos[id] = x;
-                    resposta = subir(h,id);
-                }else{
+                printf("pai = %d", ((int)id/2));
+                if(id == 1){
                     h->elementos[id] = x;
                     resposta = descer(h,id);
+                }else{
+                    if(x > h->elementos[(int)id/2]){
+                        h->elementos[id] = x;
+                        resposta = subir(h,id);
+                    }
+                    if (x < h->elementos[(int)id/2]){
+                            h->elementos[id] = x;
+                            resposta = descer(h,id);
+                    }
                 }
+                
             }else{
                 printf(RED "\nId inválido!\n" RESET);
             }
@@ -143,6 +150,10 @@ void atualizar(H *h){
         }
     }
 }
+
+/*
+     Caso deseje fazer um teste cria um arquivo main.c cole o código 
+    abaixo, faça a conexão com o arquivo pilha.h e execute.
 
 int main(){
     H *h = criar_heap();
@@ -154,5 +165,16 @@ int main(){
     printar_heap(h);
     atualizar(h);
     printar_heap(h);
+    atualizar(h);
+    printar_heap(h);
+    atualizar(h);
+    printar_heap(h);
+    atualizar(h);
+    printar_heap(h);
+    atualizar(h);
+    printar_heap(h);
+    atualizar(h);
+    printar_heap(h);
     return 0;
 }
+*/

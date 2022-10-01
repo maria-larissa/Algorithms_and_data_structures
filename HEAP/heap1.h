@@ -6,6 +6,9 @@
 #define GRN "\x1B[32m"
 #define MAG "\x1B[35m"
 
+/*
+    Struct com todos os campos que cada elemento da lista terá.
+*/
 typedef struct heap{
     int *elementos;
     int qtd;
