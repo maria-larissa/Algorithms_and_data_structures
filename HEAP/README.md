@@ -1,3 +1,3 @@
 ## HEAP
  
-Possui funções para criar, preencher, atualizar elemento(subir ou descer) e printar o HEAP. 
+Possui funções para criar, preencher, atualizar um elemento(subir ou descer) e printar o HEAP. 
