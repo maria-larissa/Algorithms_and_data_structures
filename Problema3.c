@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define max 100
-//Implemente uma funcao que receba uma fila e a inverta.
+
 typedef struct fila
 {
     int elementos[max];
