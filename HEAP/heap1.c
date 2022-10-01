@@ -153,7 +153,7 @@ void atualizar(H *h){
 
 /*
      Caso deseje fazer um teste cria um arquivo main.c cole o código 
-    abaixo, faça a conexão com o arquivo pilha.h e execute.
+    abaixo, faça a conexão com o arquivo heap1.h e execute.
 
 int main(){
     H *h = criar_heap();
