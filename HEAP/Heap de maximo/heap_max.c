@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "heap_max.h"
-#define RED "\x1B[31m"
-#define RESET "\x1B[0m"
-#define GRN "\x1B[32m"
-#define MAG "\x1B[35m"
 
 /*
     Funcão cria o heap.
