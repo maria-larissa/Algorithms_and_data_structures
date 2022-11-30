@@ -12,7 +12,7 @@
 H *criar_heap(){
     H *h =(H*) malloc(sizeof(H));
     if(h != NULL){
-        printf(MAG "\n***********CRIANDO UM HEAP MÁXIMO***********\n" RESET);
+        printf(MAG "\n***********CRIANDO UM HEAP DE MÁXIMO***********\n" RESET);
         printf("Digite o tamanho: ");
         int n;
         scanf("%d", &n);
@@ -28,7 +28,7 @@ H *criar_heap(){
 */
 int preencher_heap(H *h){
     if(h != NULL){
-        printf(MAG "\n***********PREENCHENDO UM HEAP MÁXIMO***********\n" RESET);
+        printf(MAG "\n***********PREENCHENDO HEAP DE MÁXIMO***********\n" RESET);
         printf("Quantos elementos deseja inserir? ");
         int qtd_inserir;
         scanf("%d", &qtd_inserir);
@@ -39,8 +39,7 @@ int preencher_heap(H *h){
                 printf("Digite o elemento: ");
                 scanf("%d", &h->elementos[i]);
                 h->qtd++;
-                subir(h,i);
-                printar_heap(h);
+                subir_max(h,i);
             }
             //printf("\nqtd = %d\n", h->qtd);
             return 1;
@@ -71,6 +70,10 @@ void printar_heap(H *h){
 int subir(H *h, int id){
     if(h != NULL){
         while(id > 1 && h->elementos[id] > h->elementos[(int)id/2]){
+           
+            // Caso queira saber quais trocas foram realizadas descomente a linha abaixo.
+            // printf("Troca ele[%d] = %d com ele[%d] = %d\n", id, h->elementos[id], (int)id/2, h->elementos[(int)id/2]);
+            
             int aux = h->elementos[(int)id/2];
             h->elementos[(int)id/2] = h->elementos[id];
             h->elementos[id] = aux;
@@ -95,11 +98,16 @@ int descer(H *h, int id){
                     maior = j+1;
                 }
             }
+
+            // Caso queira saber quais trocas foram realizadas descomente a linha abaixo.
+            // printf("Troca ele[%d] = %d com ele[%d] = %d\n", id, h->elementos[id], maior, h->elementos[maior]);
+
             int aux = h->elementos[maior];
             h->elementos[maior] = h->elementos[id];
             h->elementos[id] = aux;
             id = maior;
-            descer(h,id);
+            descer_max(h,id);
+            printar_heap(h);
             return 1;
         }
     }
@@ -126,15 +134,15 @@ void atualizar(H *h){
                 if(id == 1){
                     if( x < h->elementos[1] ){
                         h->elementos[1] = x;
-                        descer(h,id);
+                        descer_max(h,id);
                     }
                 }else{
                     if(x > h->elementos[(int)id/2]){
                         h->elementos[id] = x;
-                        resposta = subir(h,id);
+                        resposta = subir_max(h,id);
                     }else{
                         h->elementos[id] = x;
-                        resposta = descer(h,id);
+                        resposta = descer_max(h,id);
                     }
                 }
             }else{
