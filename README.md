@@ -6,3 +6,5 @@ Problema1: algoritmo para saber se uma palavra é palindroma, porém usando PILH
 Problema2: algoritmo para inverter PILHA usando vetor.
 
 Problema3: algoritmo para inverter FILA usando vetor.
+
+Problema4: algoritmo para criar PILHA dinamicamente.
