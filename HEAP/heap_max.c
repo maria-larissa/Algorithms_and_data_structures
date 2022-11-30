@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "heap1.h"
+#include "heap_max.h"
 #define RED "\x1B[31m"
 #define RESET "\x1B[0m"
 #define GRN "\x1B[32m"
@@ -12,11 +12,11 @@
 H *criar_heap(){
     H *h =(H*) malloc(sizeof(H));
     if(h != NULL){
-        printf(MAG "\n***********CRIANDO UM HEAP***********\n" RESET);
+        printf(MAG "\n***********CRIANDO UM HEAP MÁXIMO***********\n" RESET);
         printf("Digite o tamanho: ");
         int n;
         scanf("%d", &n);
-        h->elementos = malloc(n*sizeof(int));
+        h->elementos = malloc((n+1)*sizeof(int));
         h->qtd = 0;
         h->tam = n;
         return h;
@@ -28,15 +28,16 @@ H *criar_heap(){
 */
 int preencher_heap(H *h){
     if(h != NULL){
-        printf(MAG "\n***********PREENCHENDO UM HEAP***********\n" RESET);
+        printf(MAG "\n***********PREENCHENDO UM HEAP MÁXIMO***********\n" RESET);
         printf("Quantos elementos deseja inserir? ");
         int qtd_inserir;
         scanf("%d", &qtd_inserir);
         if(qtd_inserir <= (h->tam - h->qtd)){
-            for(int i=1; i<=qtd_inserir; i++){
-                printf("\nh.qtd=%d\n", h->qtd);
+            qtd_inserir+= h->qtd;
+            for(int i=h->qtd+1; i<=qtd_inserir; i++){
+                printf("\n%d\n",i);
                 printf("Digite o elemento: ");
-                scanf("%d", &h->elementos[(h->qtd+1)]);
+                scanf("%d", &h->elementos[i]);
                 h->qtd++;
                 subir(h,i);
                 printar_heap(h);
@@ -69,15 +70,13 @@ void printar_heap(H *h){
 */
 int subir(H *h, int id){
     if(h != NULL){
-        while( h->elementos[id] > h->elementos[((int)id/2)] && id > 0){
-            if ((int)id/2 ==0){
-                break;
-            }
-            int aux = h->elementos[((int)id/2)];
-            h->elementos[((int)id/2)] = h->elementos[id];
+        while(id > 1 && h->elementos[id] > h->elementos[(int)id/2]){
+            int aux = h->elementos[(int)id/2];
+            h->elementos[(int)id/2] = h->elementos[id];
             h->elementos[id] = aux;
-            id = ((int)id/2);
+            id = (int)id/2;
         }
+        printar_heap(h);
         return 1;
     }
 }
@@ -86,25 +85,22 @@ int descer(H *h, int id){
     if(h != NULL){
         int maior;
         int j = 2*id;
-        //verifica se existe filho direita
+        //verifica se existe filho esquerda
         if(j <= h->qtd && j <= h->tam){
             maior = j;
-
-            //verifica se existe filho esquerda
+            //verifica se existe filho direita
             if( j+1 <= h->qtd && j+1 <= h->tam){
                 //verifica quem é o maior
                 if ( h->elementos[j+1] > h->elementos[maior]){
                     maior = j+1;
                 }
             }
-            if( h->elementos[id] < h->elementos[maior]){
-                int aux = h->elementos[maior];
-                h->elementos[maior] = h->elementos[id];
-                h->elementos[id] = aux;
-                id = maior;
-                descer(h,id);
-                return 1;
-            }
+            int aux = h->elementos[maior];
+            h->elementos[maior] = h->elementos[id];
+            h->elementos[id] = aux;
+            id = maior;
+            descer(h,id);
+            return 1;
         }
     }
 }
@@ -115,32 +111,32 @@ int descer(H *h, int id){
 */
 void atualizar(H *h){
     if(h != NULL){
-        int resposta;
+        int resposta=0;
         if(h->tam == 0){
             printf("\nHeap vazio!\n");
         }else{
             printf(MAG "\n***********ATUALIZANDO ELEMENTO***********\n" RESET);
+            //printar_heap(h);
             int id, x;
             printf("\nDigite o id do elemento: ");
             scanf("%d", &id);
-            if(id >= 1 || id <= h->qtd){
+            if(id >= 1 && id <= h->qtd){
                 printf("Digite o novo valor: ");
                 scanf("%d", &x);
-                printf("pai = %d", ((int)id/2));
                 if(id == 1){
-                    h->elementos[id] = x;
-                    resposta = descer(h,id);
+                    if( x < h->elementos[1] ){
+                        h->elementos[1] = x;
+                        descer(h,id);
+                    }
                 }else{
                     if(x > h->elementos[(int)id/2]){
                         h->elementos[id] = x;
                         resposta = subir(h,id);
-                    }
-                    if (x < h->elementos[(int)id/2]){
-                            h->elementos[id] = x;
-                            resposta = descer(h,id);
+                    }else{
+                        h->elementos[id] = x;
+                        resposta = descer(h,id);
                     }
                 }
-                
             }else{
                 printf(RED "\nId inválido!\n" RESET);
             }
