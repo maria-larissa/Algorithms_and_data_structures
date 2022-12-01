@@ -203,3 +203,26 @@ void atualizar(H *h){
         }
     }
 }
+
+int remocao(H *h){
+    if(h != NULL){
+        if(h->qtd != 0){
+            printf(MAG "\n***********REMOVENDO ELEMENTO***********\n" RESET);
+           
+            int aux = h->elementos[h->qtd];
+            h->elementos[h->qtd] = h->elementos[1];
+            h->elementos[1] = aux;
+            h->qtd--;
+            int resultado = descer_min(h, 1);
+            if(resultado == 1){
+                printf(GRN "\nElemento removido com sucesso!\n\n" RESET);
+                printar_heap(h);
+            }
+            return 1;
+           
+        }else{
+            printf("\nHeap vazio!\n\n");
+            free(h);
+        }
+    }
+}

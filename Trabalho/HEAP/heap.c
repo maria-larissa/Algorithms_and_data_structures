@@ -47,8 +47,7 @@ int preencher_heap_max(H *h){
                         scanf("%d", &valor);
                         
                         // Busca o elemento dentro do heap
-                        int id_aux;
-                        resultado_busca = busca(h,valor, id_aux);
+                        resultado_busca = busca(h,valor);
                         
                         if(resultado_busca == 0){
                             h->elementos[i] = valor;
@@ -146,8 +145,7 @@ int preencher_heap_min(H *h){
                         scanf("%d", &valor);
                         
                         // Busca o elemento dentro do heap
-                        int id_aux;
-                        resultado_busca = busca(h,valor, id_aux);
+                        resultado_busca = busca(h,valor);
                         
                         if(resultado_busca == 0){
                             h->elementos[i]= valor;
@@ -174,11 +172,10 @@ int preencher_heap_min(H *h){
 /*
     Função criada para buscar o elemento no heap
 */
-int busca(H *h, int valor, int id){
+int busca(H *h, int valor){
     if (h != NULL){
         for(int i=1; i<=h->qtd; i++){
             if (h->elementos[i] == valor){
-                id = i;
                 return 1;
             }
 
@@ -285,8 +282,7 @@ void atualizar_max(H *h){
                 printf("Digite o novo valor: ");
                 scanf("%d", &x);
 
-                int id_aux;
-                int resultado_busca = busca(h, x, id_aux);
+                int resultado_busca = busca(h, x);
                 if( resultado_busca == 0){
                     if(id == 1){
                         if( x < h->elementos[1] ){
@@ -334,8 +330,7 @@ void atualizar_min(H *h){
                 printf("Digite o novo valor: ");
                 scanf("%d", &x);
 
-                int id_aux;
-                int resultado_busca = busca(h, x, id_aux);
+                int resultado_busca = busca(h, x);
                 if( resultado_busca == 0){
                     if(id == 1){
 
@@ -409,9 +404,10 @@ int remocao_min(H *h){
             h->elementos[h->qtd] = h->elementos[1];
             h->elementos[1] = aux;
             h->qtd--;
-            int resultado = descer_max(h, 1);
+            int resultado = descer_min(h, 1);
             if(resultado == 1){
                 printf(GRN "\nElemento removido com sucesso!\n\n" RESET);
+                printar_heap(h);
             }
             return 1;
            

@@ -30,3 +30,5 @@ int descer(H *h, int id);
 void printar_heap(H *h);
 
 void atualizar(H *h);
+
+int remocao(H *h);

@@ -21,6 +21,7 @@ int main(){
         // atualizar_min(h);
         // atualizar_min(h);
         remocao_min(h);
+        remocao_min(h);
     }
     return 0;
 }

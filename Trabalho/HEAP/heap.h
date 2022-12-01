@@ -27,7 +27,7 @@ int remocao_max(H *h);
 
 int preencher_heap_min(H *h);
 
-int busca(H *h, int valor, int id);
+int busca(H *h, int valor);
 
 int subir_min(H *h, int id);
 
