@@ -23,13 +23,17 @@ int subir_max(H *h, int id);
 
 int descer_max(H *h, int id);
 
+int remocao_max(H *h);
+
 int preencher_heap_min(H *h);
 
-int busca(H *h, int valor);
+int busca(H *h, int valor, int id);
 
 int subir_min(H *h, int id);
 
 int descer_min(H *h, int id);
+
+int remocao_min(H *h);
 
 void printar_heap(H *h);
 

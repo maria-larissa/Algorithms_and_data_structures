@@ -28,3 +28,5 @@ int subir(H *h, int id);
 int descer(H *h, int id);
 
 void atualizar(H *h);
+
+int remocao(H *h);

@@ -13,12 +13,14 @@ int main(){
         preencher_heap_max(h);
         atualizar_max(h);
         atualizar_max(h);
+        remocao_max(h);
     }else{
         preencher_heap_min(h);
-        atualizar_min(h);
-        atualizar_min(h);
-        atualizar_min(h);
-        atualizar_min(h);
+        // atualizar_min(h);
+        // atualizar_min(h);
+        // atualizar_min(h);
+        // atualizar_min(h);
+        remocao_min(h);
     }
     return 0;
 }

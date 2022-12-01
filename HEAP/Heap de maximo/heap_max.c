@@ -131,13 +131,14 @@ int descer(H *h, int id){
             }
 
             // Caso queira ver as trocas efetuadas descomente a linha abaixo
-            // printf("Troca ele[%d] = %d com ele[%d] = %d\n", id, h->elementos[id], maior, h->elementos[maior]);
-            
-            int aux = h->elementos[maior];
-            h->elementos[maior] = h->elementos[id];
-            h->elementos[id] = aux;
-            id = maior;
-            descer_max(h,id);
+            printf("Troca ele[%d] = %d com ele[%d] = %d\n", id, h->elementos[id], maior, h->elementos[maior]);
+            if(h->elementos[id] < h->elementos[maior]){
+                int aux = h->elementos[maior];
+                h->elementos[maior] = h->elementos[id];
+                h->elementos[id] = aux;
+                id = maior;
+                descer_max(h,id);
+            }
             printar_heap(h);
             return 1;
         }
@@ -192,6 +193,29 @@ void atualizar(H *h){
     }
 }
 
+int remocao(H *h){
+    if(h != NULL){
+        if(h->qtd != 0){
+            printf(MAG "\n***********REMOVENDO ELEMENTO***********\n" RESET);
+            // Troca o 1º elemento com o último para poder remover
+            int aux = h->elementos[h->qtd];
+            h->elementos[h->qtd] = h->elementos[1];
+            h->elementos[1] = aux;
+            h->qtd--;
+            int resultado = descer_max(h, 1);
+            if(resultado == 1){
+                printf(GRN "\nElemento removido com sucesso!\n\n" RESET);
+            }
+            return 1;
+
+        }else{
+            printf("\nHeap vazio!\n\n");
+            free(h);
+        }
+    }
+}
+
+
 /*
      Caso deseje fazer um teste cria um arquivo main.c cole o código 
     abaixo, faça a conexão com o arquivo heap1.h e execute.
@@ -216,6 +240,8 @@ int main(){
     printar_heap(h);
     atualizar(h);
     printar_heap(h);
+    remocao(h);
+    remocao(h);
     return 0;
 }
 */
