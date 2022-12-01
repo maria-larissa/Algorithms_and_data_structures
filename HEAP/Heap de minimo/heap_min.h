@@ -16,3 +16,17 @@ typedef struct heap{
 }H;
 
 H *criar_heap();
+
+void printar_heap(H *h);
+
+int preencher_heap(H *h);
+
+int busca(H *h, int valor);
+
+int subir(H *h, int id);
+
+int descer(H *h, int id);
+
+void printar_heap(H *h);
+
+void atualizar(H *h);

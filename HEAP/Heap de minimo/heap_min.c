@@ -6,7 +6,7 @@
 H *criar_heap(){
     H *h =(H*) malloc(sizeof(H));
     if(h != NULL){
-        printf(MAG "\n***********CRIANDO UM HEAP***********\n" RESET);
+        printf(MAG "\n***********CRIANDO UM HEAP DE MÍNIMO***********\n" RESET);
         printf("Digite o tamanho: ");
         int n;
         scanf("%d", &n);
@@ -20,28 +20,48 @@ H *criar_heap(){
 /*
     Funcão craida somente para preencher o heap de mínimo.
 */
-int preencher_heap_min(H *h){
+int preencher_heap(H *h){
     if(h != NULL){
         printf(MAG "\n***********PREENCHENDO HEAP DE MÍNIMO***********\n" RESET);
-        printf("Quantos elementos deseja inserir? ");
-        int qtd_inserir;
-        scanf("%d", &qtd_inserir);
-        if(qtd_inserir <= (h->tam - h->qtd)){
-            qtd_inserir+= h->qtd;
-            for(int i=h->qtd+1; i<=qtd_inserir; i++){
-                printf("\n%d\n",i);
-                printf("Digite o elemento: ");
-                scanf("%d", &h->elementos[i]);
-                h->qtd++;
-                if (h->qtd >= 2 ){
-                    printf("\nelem[%d]= %d\nelem[%d] = %d\n", (int)i/2, h->elementos[(int)i/2], i, h->elementos[i]);
-                    descer_min(h, i);
+        while (h->qtd != h->tam){
+            printf("Quantos elementos deseja inserir? ");
+            int qtd_inserir;
+            scanf("%d", &qtd_inserir);
+            if(qtd_inserir <= (h->tam - h->qtd)){
+                qtd_inserir+= h->qtd;
+                
+                for(int i=h->qtd+1; i<=qtd_inserir; i++){
+                    
+                    int resultado_busca = 1;
+                
+                    while(resultado_busca == 1){
+                    
+                        printf("\nDigite o %dº elemento: ", i);
+                        int valor;
+                        scanf("%d", &valor);
+                        
+                        // Busca o elemento dentro do heap
+                        resultado_busca = busca(h,valor);
+                        
+                        if(resultado_busca == 0){
+                            h->elementos[i]= valor;
+                            h->qtd++;
+                            if (h->qtd >= 2 ){
+                                subir_min(h, i);
+                            }
+                            printar_heap(h);
+                        }
+                        if(resultado_busca == 1){
+                            printf("\n\nO elemento já existe no heap.\nTENTE NOVAMENTE!\n");
+                        }
+                    }
+                    
                 }
+            }else{
+                printf("\nSó é possivel inserir mais %d elementos.\n\n", (h->tam-h->qtd));
             }
-            return 1;
-        }else{
-            printf("\nSó é possivel inserir mais %d elementos.\n", (h->tam-h->qtd));
         }
+        return 1;
     }
 }
 
@@ -49,7 +69,7 @@ int preencher_heap_min(H *h){
     As funções subir e descer foram criadas para manter a estrutura do
     heap de mínimo mesmo que um valor seja atualizado.
 */
-int descer_min(H *h, int id){
+int descer(H *h, int id){
     if (h != NULL){
         int j = 2*id;
         int menor;
@@ -65,8 +85,10 @@ int descer_min(H *h, int id){
             }
         
             if(h->elementos[id] > h->elementos[menor]){
-                printf("\nmenor -> elem[%d] = %d", menor, h->elementos[menor]);
-                printf("\nTroca elem[%d] = %d com elem[%d] = %d\n", id, h->elementos[id], menor, h->elementos[menor] );
+
+                // Caso queira ver as trocas efetuadas descomente a linha abaixo
+                // printf("\nTroca elem[%d] = %d com elem[%d] = %d\n", id, h->elementos[id], menor, h->elementos[menor] );
+        
                 int aux = h->elementos[menor];
                 h->elementos[menor] = h->elementos[id];
                 h->elementos[id] = aux;
@@ -78,17 +100,18 @@ int descer_min(H *h, int id){
     }
 }
 
-int subir_min(H *h, int id){
+int subir(H *h, int id){
     if( h != NULL){
         int j = (int)id/2;      //pai
         int k = id;             //atual
             
         //Compara com todos os elementos até chegar na raiz
         while(j >= 1){
-            printf("\nj(pai) = %d\n", j);
-            printf("\nk(atual) = %d\n", k);
             if(h->elementos[j] > h->elementos[k]){    
-                printf("\nTroca elem[%d] = %d com elem[%d] = %d\n", k, h->elementos[k], j, h->elementos[j] );
+                
+                // Caso queira ver as trocas efetuadas descomente a linha abaixo  
+                // printf("\nTroca elem[%d] = %d com elem[%d] = %d\n", k, h->elementos[k], j, h->elementos[j] );
+                
                 int aux = h->elementos[k];
                 h->elementos[k] = h->elementos[j];
                 h->elementos[j] = aux;
@@ -97,10 +120,24 @@ int subir_min(H *h, int id){
             // j recebe posição do pai
             k = j;
             j = (int)j/2;
-            // descer_min(h,j);
         }
-        printar_heap(h);
+
         return 1;
+    }
+}
+
+/*
+    Funcão criada somente para printar os elementos existentes no heap.
+*/
+void printar_heap(H *h){
+    if (h != NULL){
+        printf(MAG "\n***********ELEMENTOS DO HEAP***********\n" RESET);
+        for(int i=1; i<= (h->qtd) ;i++){
+            printf("ele[%d] = %d\n", i, h->elementos[i]);
+        }
+        printf("\n");
+    }else{
+        printf(RED "\nErro!\n" RESET);
     }
 }
 
@@ -109,7 +146,7 @@ int subir_min(H *h, int id){
     Funcão criada somente para atualizar valores do heap de mínimo e coloca-lo 
     na posição certa.
 */
-void atualizar_min(H *h){
+void atualizar(H *h){
     if(h != NULL){
         int resposta=0;
         if(h->tam == 0){
@@ -123,33 +160,45 @@ void atualizar_min(H *h){
             if(id >= 1 && id <= h->qtd){
                 printf("Digite o novo valor: ");
                 scanf("%d", &x);
-                if(id == 1){
 
-                    // Se for maior que o valor que estava precisa descer
-                    if(x > h->elementos[1] ){
-                        h->elementos[1] = x;
-                        descer_min(h, id);
-                    }
+                int resultado_busca = busca(h, x);
+                if( resultado_busca == 0){
+                    if(id == 1){
 
-                    // Se for meno só atualiza
-                    if(x < h->elementos[1]){
-                        h->elementos[1] = x;
-                    }
-                }else{
-                    
-                    // Se for maior do que o valor que existia desce
-                    if( x > h->elementos[id]){
-                        h->elementos[id] = x;
-                        descer_min(h,id);
+                        // Se for maior que o valor que estava precisa descer
+                        if(x > h->elementos[1] ){
+                            h->elementos[1] = x;
+                            descer_min(h, id);
+                        }
 
-                    // se for menor que o valor que existia sobe 
+                        // Se for meno só atualiza
+                        if(x < h->elementos[1]){
+                            h->elementos[1] = x;
+                        }
                     }else{
-                        h->elementos[id]= x;
-                        subir_min(h,id);
-                    }
+                        
+                        // Se for maior do que o valor que existia desce
+                        if( x > h->elementos[id]){
+                            h->elementos[id] = x;
+                            descer_min(h,id);
 
+                        // se for menor que o valor que existia sobe 
+                        }else{
+                            h->elementos[id]= x;
+                            subir_min(h,id);
+                        }
+
+                    }
+                    printar_heap(h);
+                }else{
+                    printf("\nO elemento já existe no heap.\n");
                 }
-                printar_heap(h);
+
+            }else{
+                printf(RED "\nId inválido!\n" RESET);
+            }
+            if(resposta == 1){
+                printf(GRN "\nElemento ATUALIZADO com sucesso!\n" RESET);
             }
         }
     }

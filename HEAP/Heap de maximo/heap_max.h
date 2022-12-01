@@ -21,6 +21,8 @@ int preencher_heap(H *h);
 
 void printar_heap(H *h);
 
+int busca(H *h, int valor);
+
 int subir(H *h, int id);
 
 int descer(H *h, int id);

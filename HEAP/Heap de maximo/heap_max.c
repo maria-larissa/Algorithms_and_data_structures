@@ -23,25 +23,62 @@ H *criar_heap(){
 int preencher_heap(H *h){
     if(h != NULL){
         printf(MAG "\n***********PREENCHENDO HEAP DE MÁXIMO***********\n" RESET);
-        printf("Quantos elementos deseja inserir? ");
-        int qtd_inserir;
-        scanf("%d", &qtd_inserir);
-        if(qtd_inserir <= (h->tam - h->qtd)){
-            qtd_inserir+= h->qtd;
-            for(int i=h->qtd+1; i<=qtd_inserir; i++){
-                printf("\n%d\n",i);
-                printf("Digite o elemento: ");
-                scanf("%d", &h->elementos[i]);
-                h->qtd++;
-                subir_max(h,i);
+        while (h->qtd != h->tam){
+            printf("Quantos elementos deseja inserir? ");
+            int qtd_inserir;
+            scanf("%d", &qtd_inserir);
+            if(qtd_inserir <= (h->tam - h->qtd)){
+                qtd_inserir+= h->qtd;
+                for(int i=h->qtd+1; i<=qtd_inserir; i++){
+
+                    int resultado_busca = 1;
+                
+                    while(resultado_busca == 1){
+                    
+                        printf("\nDigite o %dº elemento: ", i);
+                        int valor;
+                        scanf("%d", &valor);
+                        
+                        // Busca o elemento dentro do heap
+                        resultado_busca = busca(h,valor);
+                        
+                        if(resultado_busca == 0){
+                            h->elementos[i] = valor;
+                            h->qtd++;
+                            subir_max(h,i);
+                        }
+                        if(resultado_busca == 1){
+                            printf("\n\nO elemento já existe no heap.\nTENTE NOVAMENTE!\n");
+                        }
+                    }
+
+                }
+            }else{
+                printf("\nSó é possivel inserir mais %d elementos.\n\n", (h->tam-h->qtd));
             }
-            //printf("\nqtd = %d\n", h->qtd);
-            return 1;
-        }else{
-            printf("\nSó é possivel inserir mais %d elementos.\n", (h->tam-h->qtd));
+        }
+        return 1;
+    }
+}
+
+
+/*
+    Função criada para buscar o elemento no heap
+*/
+int busca(H *h, int valor){
+    if (h != NULL){
+        for(int i=1; i<=h->qtd; i++){
+            if (h->elementos[i] == valor){
+                return 1;
+            }
+
+            if( i == h->qtd){
+                return 0;
+            }
         }
     }
 }
+
 
 /*
     Funcão criada somente para printar os elementos existentes no heap.
@@ -64,8 +101,8 @@ void printar_heap(H *h){
 int subir(H *h, int id){
     if(h != NULL){
         while(id > 1 && h->elementos[id] > h->elementos[(int)id/2]){
-           
-            // Caso queira saber quais trocas foram realizadas descomente a linha abaixo.
+            
+            // Caso queira ver as trocas efetuadas descomente a linha abaixo
             // printf("Troca ele[%d] = %d com ele[%d] = %d\n", id, h->elementos[id], (int)id/2, h->elementos[(int)id/2]);
             
             int aux = h->elementos[(int)id/2];
@@ -93,9 +130,9 @@ int descer(H *h, int id){
                 }
             }
 
-            // Caso queira saber quais trocas foram realizadas descomente a linha abaixo.
+            // Caso queira ver as trocas efetuadas descomente a linha abaixo
             // printf("Troca ele[%d] = %d com ele[%d] = %d\n", id, h->elementos[id], maior, h->elementos[maior]);
-
+            
             int aux = h->elementos[maior];
             h->elementos[maior] = h->elementos[id];
             h->elementos[id] = aux;
@@ -125,19 +162,25 @@ void atualizar(H *h){
             if(id >= 1 && id <= h->qtd){
                 printf("Digite o novo valor: ");
                 scanf("%d", &x);
-                if(id == 1){
-                    if( x < h->elementos[1] ){
-                        h->elementos[1] = x;
-                        descer_max(h,id);
+
+                int resultado_busca = busca(h, x);
+                if( resultado_busca == 0){
+                    if(id == 1){
+                        if( x < h->elementos[1] ){
+                            h->elementos[1] = x;
+                            subir_max(h,id);
+                        }
+                    }else{
+                        if(x > h->elementos[(int)id/2]){
+                            h->elementos[id] = x;
+                            resposta = subir_max(h,id);
+                        }else{
+                            h->elementos[id] = x;
+                            resposta = descer_max(h,id);
+                        }
                     }
                 }else{
-                    if(x > h->elementos[(int)id/2]){
-                        h->elementos[id] = x;
-                        resposta = subir_max(h,id);
-                    }else{
-                        h->elementos[id] = x;
-                        resposta = descer_max(h,id);
-                    }
+                    printf("\nO elemento já existe no heap.\n");
                 }
             }else{
                 printf(RED "\nId inválido!\n" RESET);
