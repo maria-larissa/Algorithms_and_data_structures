@@ -30,3 +30,5 @@ int descer(H *h, int id);
 void atualizar(H *h);
 
 int remocao(H *h);
+
+void heapsort(H * h);

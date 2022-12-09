@@ -4,9 +4,9 @@
     Funcão cria o heap.
 */
 H *criar_heap(){
-    H *h =(H*) malloc(sizeof(H));
+    H *h = (H*) malloc(sizeof(H));
     if(h != NULL){
-        printf(MAG "\n***********CRIANDO UM HEAP DE MÁXIMO***********\n" RESET);
+        printf(MAG "\n\n***********CRIANDO UM HEAP***********\n" RESET);
         printf("Digite o tamanho: ");
         int n;
         scanf("%d", &n);
@@ -89,6 +89,7 @@ void printar_heap(H *h){
         for(int i=1; i<= (h->qtd) ;i++){
             printf("ele[%d] = %d\n", i, h->elementos[i]);
         }
+        printf("\n");
     }else{
         printf(RED "\nErro!\n" RESET);
     }
@@ -131,15 +132,14 @@ int descer(H *h, int id){
             }
 
             // Caso queira ver as trocas efetuadas descomente a linha abaixo
-            printf("Troca ele[%d] = %d com ele[%d] = %d\n", id, h->elementos[id], maior, h->elementos[maior]);
+            // printf("Troca ele[%d] = %d com ele[%d] = %d\n", id, h->elementos[id], maior, h->elementos[maior]);
             if(h->elementos[id] < h->elementos[maior]){
                 int aux = h->elementos[maior];
                 h->elementos[maior] = h->elementos[id];
                 h->elementos[id] = aux;
                 id = maior;
-                descer_max(h,id);
+                descer(h,id);
             }
-            printar_heap(h);
             return 1;
         }
     }
@@ -178,6 +178,7 @@ void atualizar(H *h){
                         }else{
                             h->elementos[id] = x;
                             resposta = descer_max(h,id);
+                            printar_heap(h);
                         }
                     }
                 }else{
@@ -193,55 +194,71 @@ void atualizar(H *h){
     }
 }
 
+
+/*
+    Funcão criada somente para remover valores do heap de mínimo.
+*/
 int remocao(H *h){
-    if(h != NULL){
-        if(h->qtd != 0){
+        if(h != NULL && h->qtd != 0){
             printf(MAG "\n***********REMOVENDO ELEMENTO***********\n" RESET);
-            // Troca o 1º elemento com o último para poder remover
+           
             int aux = h->elementos[h->qtd];
             h->elementos[h->qtd] = h->elementos[1];
             h->elementos[1] = aux;
             h->qtd--;
-            int resultado = descer_max(h, 1);
+            int resultado = descer_min(h, 1);
             if(resultado == 1){
                 printf(GRN "\nElemento removido com sucesso!\n\n" RESET);
+                printar_heap(h);
             }
             return 1;
 
+        
         }else{
-            printf("\nHeap vazio!\n\n");
-            free(h);
-        }
+        printf("\nHeap vazio!\n\n");
+        free(h);
     }
 }
 
 
 /*
-     Caso deseje fazer um teste cria um arquivo main.c cole o código 
-    abaixo, faça a conexão com o arquivo heap1.h e execute.
-
-int main(){
-    H *h = criar_heap();
-    preencher_heap(h);
-    printar_heap(h);
-    atualizar(h);
-    printar_heap(h);
-    atualizar(h);
-    printar_heap(h);
-    atualizar(h);
-    printar_heap(h);
-    atualizar(h);
-    printar_heap(h);
-    atualizar(h);
-    printar_heap(h);
-    atualizar(h);
-    printar_heap(h);
-    atualizar(h);
-    printar_heap(h);
-    atualizar(h);
-    printar_heap(h);
-    remocao(h);
-    remocao(h);
-    return 0;
-}
+    Funcão criada somente para ordenar valores do heap de mínimo.
 */
+void heapsort(H * h){
+    if(h != NULL && h->qtd != 0){
+        printf(MAG "\n***********HEAPSORT***********\n" RESET);
+        int tam = h->qtd;
+        int vetor[tam];
+        for(int i=1; i<=h->qtd+(tam-2); i++){
+            if(h->qtd == 2){
+                int maior = h->elementos[1];
+                int menor = h->elementos[2];
+                if(h->elementos[2] >maior){
+                    maior = h->elementos[2];
+                    menor = h->elementos[1];
+                }
+                vetor[i]= maior;
+                vetor[i+1]= menor;
+
+            }
+
+            // Cria heap auxiliar para fazer as trocas
+            int aux = h->elementos[h->qtd];
+            h->elementos[h->qtd] = h->elementos[1];
+            h->elementos[1] = aux;
+            vetor[i]= h->elementos[h->qtd];
+            h->qtd--;
+            descer(h, 1);
+            printar_heap(h);
+
+        }
+        h->qtd=0;
+        for (int i=1 ;i<=tam ; i++){
+            h->elementos[i] = vetor[i];
+            h->qtd++;
+        }
+        printar_heap(h);
+        
+    }
+
+}

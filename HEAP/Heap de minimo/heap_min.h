@@ -32,3 +32,5 @@ void printar_heap(H *h);
 void atualizar(H *h);
 
 int remocao(H *h);
+
+void heapsort(H * h);
